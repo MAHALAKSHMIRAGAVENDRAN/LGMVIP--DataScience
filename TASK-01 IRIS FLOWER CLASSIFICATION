@@ -1,0 +1,162 @@
+#Import Libraries/Packages
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+import warnings
+warnings.filterwarnings('ignore')
+import pandas as pd
+
+# Load the csv file into a DataFrame
+dataset = pd.read_csv("Iris.csv")
+
+dataset
+# Shape of Dataset
+dataset.shape
+#Display the first few rows of the DataFrame
+dataset.head()
+#Checking Null Values
+dataset.isnull().sum()
+#Dataset Summary
+dataset.info()
+#Dataset Statistical Summary
+dataset.describe()
+# To display no. of samples on each class.
+dataset['Species'].value_counts()
+dataset['Species'].value_counts().plot(kind = 'pie',  autopct = '%1.1f%%', shadow = True, explode = [0.05,0.05,0.05])
+dataset.corr()
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(9, 7))
+sns.heatmap(dataset.corr(), cmap='CMRmap', annot=True, linewidths=2)
+plt.title("Correlation Graph", size=20)
+plt.show()
+#Label encoding for categorical variables
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+dataset['Species'] = le.fit_transform(dataset['Species'])
+dataset.head()
+dataset['Species'].unique()
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Load the CSV file into a DataFrame
+df = pd.read_csv("Iris.csv")
+
+features = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']
+X = df.loc[:, features].values
+Y = df['Species'].values
+
+# Split the dataset into training and test sets
+X_Train, X_Test, Y_Train, Y_Test = train_test_split(X, Y, test_size=0.2, random_state=0)
+
+print(X_Train.shape)
+Y_Train.shape
+X_Test.shape
+Y_Test.shape
+# Feature Scaling to bring all the variables in a single scale.
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_Train = sc.fit_transform(X_Train)
+X_Test = sc.transform(X_Test)
+
+
+# Importing some metrics for evaluating  models.
+from sklearn import metrics
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import  classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.linear_model import LogisticRegression
+log_model= LogisticRegression(random_state = 0)
+log_model.fit(X_Train, Y_Train)
+
+# model training
+log_model.fit(X_Train, Y_Train)
+
+# Predicting
+Y_Pred_Test_log_res=log_model.predict(X_Test)
+
+     
+
+print(Y_Pred_Test_log_res)
+log_model = LogisticRegression(random_state=0, max_iter=100)
+from sklearn import metrics
+
+accuracy = metrics.accuracy_score(Y_Test, Y_Pred_Test_log_res)
+print("Accuracy:", accuracy * 100)
+from sklearn.metrics import  classification_report
+print(classification_report(Y_Test, Y_Pred_Test_log_res))
+from sklearn.metrics import confusion_matrix
+confusion_matrix(Y_Test,Y_Pred_Test_log_res )
+from sklearn.neighbors import KNeighborsClassifier
+knn_model = KNeighborsClassifier(n_neighbors=3, weights='distance', algorithm='auto')
+
+# Importing KNeighborsClassifier 
+from sklearn.neighbors import KNeighborsClassifier
+knn_model = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2)
+
+# model training
+knn_model.fit(X_Train, Y_Train)
+
+# Predicting
+Y_Pred_Test_knn=knn_model.predict(X_Test)
+     
+
+# model training
+log_model.fit(X_Train, Y_Train)
+Y_Pred_Test_knn
+print("Accuracy:",metrics.accuracy_score(Y_Test,Y_Pred_Test_knn)*100)
+print(classification_report(Y_Test,Y_Pred_Test_knn))
+confusion_matrix(Y_Test, Y_Pred_Test_knn)
+from sklearn.tree import DecisionTreeClassifier
+dec_tree = DecisionTreeClassifier(criterion='entropy',splitter='best',max_depth=6)
+
+# model training
+dec_tree.fit(X_Train, Y_Train)
+
+# Predicting
+Y_Pred_Test_dtr=dec_tree.predict(X_Test)
+     
+
+Y_Pred_Test_dtr
+print("Accuracy:",metrics.accuracy_score(Y_Test, Y_Pred_Test_dtr)*100)
+
+print(classification_report(Y_Test, Y_Pred_Test_dtr))
+confusion_matrix(Y_Test, Y_Pred_Test_dtr)
+from sklearn.naive_bayes import GaussianNB
+nav_byes = GaussianNB()
+
+# model training
+nav_byes.fit(X_Train, Y_Train)
+
+# Predicting
+Y_Pred_Test_nvb=nav_byes.predict(X_Test)
+     
+
+Y_Pred_Test_nvb
+print("Accuracy:",metrics.accuracy_score(Y_Test, Y_Pred_Test_nvb)*100)
+
+
+print(classification_report(Y_Test, Y_Pred_Test_nvb))
+confusion_matrix(Y_Test,Y_Pred_Test_nvb )
+from sklearn.svm import SVC
+svm_model=SVC(C=500, kernel='rbf')
+
+# model training
+svm_model.fit(X_Train, Y_Train)
+
+# Predicting
+Y_Pred_Test_svm=svm_model.predict(X_Test)
+     
+
+Y_Pred_Test_svm
+print("Accuracy:",metrics.accuracy_score(Y_Test,Y_Pred_Test_svm)*100)
+onfusion_matrix(Y_Test,Y_Pred_Test_svm )
+print("Accuracy of Logistic Regression Model:",metrics.accuracy_score(Y_Test, Y_Pred_Test_log_res)*100)
+print("Accuracy of KNN Model:",metrics.accuracy_score(Y_Test,Y_Pred_Test_knn)*100)
+print("Accuracy of Decision Tree Model:",metrics.accuracy_score(Y_Test, Y_Pred_Test_dtr)*100)
+print("Accuracy of Naive Bayes Model:",metrics.accuracy_score(Y_Test, Y_Pred_Test_nvb)*100)
+print("Accuracy of SVM Model:",metrics.accuracy_score(Y_Test,Y_Pred_Test_svm)*100)
+print(classification_report(Y_Test, Y_Pred_Test_svm))
